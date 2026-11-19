@@ -1,0 +1,22 @@
+{
+ "legs locked (passive)": {
+  "mean_tilt_deg": 16.533820054890107,
+  "sd": 0.6725645732436352,
+  "tilt_removed_pct": 0.0
+ },
+ "teacher (knows the true tilt)": {
+  "mean_tilt_deg": 1.6157848738555334,
+  "sd": 0.07225317864534575,
+  "tilt_removed_pct": 90.22739531160168
+ },
+ "real brain (nerve cord + antennae)": {
+  "mean_tilt_deg": 3.07110164486277,
+  "sd": 0.21210969979320435,
+  "tilt_removed_pct": 81.42533525424182
+ },
+ "brain with senses cut": {
+  "mean_tilt_deg": 25.914417535647104,
+  "sd": 7.071253149307734,
+  "tilt_removed_pct": -56.7358145281287
+ }
+}

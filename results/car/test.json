@@ -1,0 +1,98 @@
+[
+ {
+  "mode": "trained",
+  "seconds": 20,
+  "cars": 2,
+  "crashes": [
+   2,
+   0
+  ],
+  "crashes_per_min": 3.0,
+  "crash_free_pct": 90.0,
+  "laps": [
+   1.42,
+   1.41
+  ],
+  "track": "unseen bean track"
+ },
+ {
+  "mode": "native",
+  "seconds": 20,
+  "cars": 2,
+  "crashes": [
+   17,
+   16
+  ],
+  "crashes_per_min": 49.5,
+  "crash_free_pct": 5.0,
+  "laps": [
+   1.37,
+   1.37
+  ],
+  "track": "unseen bean track"
+ },
+ {
+  "mode": "blind",
+  "seconds": 20,
+  "cars": 2,
+  "crashes": [
+   15,
+   10
+  ],
+  "crashes_per_min": 37.5,
+  "crash_free_pct": 10.0,
+  "laps": [
+   1.4,
+   1.4
+  ],
+  "track": "unseen bean track"
+ },
+ {
+  "mode": "trained",
+  "seconds": 20,
+  "cars": 2,
+  "crashes": [
+   0,
+   0
+  ],
+  "crashes_per_min": 0.0,
+  "crash_free_pct": 100.0,
+  "laps": [
+   1.61,
+   1.61
+  ],
+  "track": "training oval"
+ },
+ {
+  "mode": "native",
+  "seconds": 20,
+  "cars": 2,
+  "crashes": [
+   14,
+   14
+  ],
+  "crashes_per_min": 42.0,
+  "crash_free_pct": 15.0,
+  "laps": [
+   1.54,
+   1.54
+  ],
+  "track": "training oval"
+ },
+ {
+  "mode": "blind",
+  "seconds": 20,
+  "cars": 2,
+  "crashes": [
+   12,
+   12
+  ],
+  "crashes_per_min": 36.0,
+  "crash_free_pct": 15.0,
+  "laps": [
+   1.56,
+   1.56
+  ],
+  "track": "training oval"
+ }
+]

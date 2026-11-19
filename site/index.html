@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Fly Connectome Lab</title>
+<meta name="description" content="A real fruit-fly connectome (MaleCNS, 167,106 neurons) driving a car, playing Pong, balancing a physics body and learning smells, with videos, numbers and controls.">
+<meta property="og:title" content="Fly Connectome Lab">
+<meta property="og:description" content="A real fruit-fly brain drives a car, plays Pong, balances a body and learns to love petrol. Measured, with controls.">
+<meta property="og:image" content="images/car_unseen_track.jpg">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>html{color-scheme:light dark}body{margin:0}img,video{max-width:100%}[hidden]{display:none!important}</style>
+<style>
+/* Layout: a lab notebook. One column of experiments; each pairs its video with a small results ledger. */
+:root {
+  --bg: #f3f4f6;
+  --panel: #ffffff;
+  --ink: #15171d;
+  --muted: #5d6270;
+  --rule: #d9dce3;
+  --accent: #a8322a;      /* the brick red of a fruit fly's eye */
+  --amber: #b97a12;
+  --good: #1f7a4d;
+  --bad: #9a3b2f;
+  --chip: #eceef2;
+  --font-display: "IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1116; --panel: #171a21; --ink: #e8e9ee; --muted: #9aa0ad; --rule: #2a2e38;
+    --accent: #e0645a; --amber: #e5ac4a; --good: #5ec08f; --bad: #e07b6c; --chip: #222631; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1116; --panel: #171a21; --ink: #e8e9ee; --muted: #9aa0ad; --rule: #2a2e38;
+  --accent: #e0645a; --amber: #e5ac4a; --good: #5ec08f; --bad: #e07b6c; --chip: #222631; color-scheme: dark;
+}
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.55; }
+.wrap { max-width: 1040px; margin: 0 auto; padding-block: 40px 72px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 56px; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h1 { font-size: clamp(2rem, 5vw, 3.1rem); line-height: 1.05; font-weight: 700; }
+h2 { font-size: clamp(1.45rem, 3vw, 1.9rem); line-height: 1.15; font-weight: 600; }
+h3 { font-size: 1.05rem; font-weight: 600; }
+p { margin: 0; max-width: 68ch; }
+.lede { font-size: 1.12rem; color: var(--muted); }
+.mono { font-family: var(--font-mono); font-size: 0.85em; }
+.eyebrow { font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+header { display: grid; gap: 18px; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px 10px; }
+.fact { font-family: var(--font-mono); font-size: 0.82rem; background: var(--chip); border-radius: 4px; padding: 4px 9px; color: var(--ink); }
+.scores { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+.score { background: var(--panel); padding: 14px 16px; display: grid; gap: 2px; min-width: 0; }
+.score b { font-family: var(--font-display); font-size: 2rem; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.score span { font-size: 0.86rem; color: var(--muted); }
+section.exp { display: grid; gap: 18px; border-top: 1px solid var(--rule); padding-top: 28px; }
+.exp-head { display: grid; gap: 6px; }
+.media { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.media.one { grid-template-columns: 1fr; }
+figure { margin: 0; display: grid; gap: 6px; min-width: 0; }
+video { width: 100%; max-width: 100%; aspect-ratio: 16 / 9; background: #000; border-radius: 6px; display: block; }
+figcaption { font-size: 0.85rem; color: var(--muted); }
+.split { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+.how { display: grid; gap: 10px; }
+.how p { color: var(--ink); }
+.how .learn { font-size: 0.92rem; color: var(--muted); }
+.ledger { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 0.93rem; }
+.ledger th { text-align: left; font-weight: 500; color: var(--muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; padding: 0 0 6px; border-bottom: 1px solid var(--rule); }
+.ledger td { padding: 8px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.ledger td.v { text-align: right; font-family: var(--font-mono); white-space: nowrap; padding-left: 12px; }
+.ledger tr.main td { font-weight: 600; }
+.ledger tr.main td.v { color: var(--good); }
+.ledger td.v.low { color: var(--bad); }
+.tablebox { overflow-x: auto; }
+.note { font-size: 0.9rem; color: var(--muted); }
+.honest { display: grid; gap: 12px; }
+.honest ul { margin: 0; padding-left: 1.1em; display: grid; gap: 8px; max-width: 72ch; }
+.post { background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; padding: 18px; display: grid; gap: 12px; }
+.post pre { white-space: pre-wrap; font-family: var(--font-body); font-size: 0.95rem; margin: 0; max-width: 72ch; }
+button { font: 500 0.9rem var(--font-body); color: var(--panel); background: var(--ink); border: 0; border-radius: 4px; padding: 8px 14px; cursor: pointer; justify-self: start; }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+footer { font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 20px; }
+@media (max-width: 760px) { .media, .split { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="eyebrow">MaleCNS connectome · Apple M2 laptop</div>
+  <h1>I put a real fruit-fly brain in a car, a Pong game, a physics body and a smell maze</h1>
+  <p class="lede">Every experiment runs the male fruit-fly connectome that Janelia FlyEM and Google Research released in September 2026: 167,106 neurons wired exactly as mapped, simulated as spiking neurons. The wiring is never edited. What learns is a small interface around it, the way you might fit a steering wheel to a driver.</p>
+  <div class="facts">
+    <span class="fact">167,106 neurons</span><span class="fact">25.6M connections</span><span class="fact">1,466 eye facets (real retina map)</span><span class="fact">flybody MuJoCo body, 67 parts</span><span class="fact">0.24× real time on an M2 GPU</span>
+  </div>
+  <div class="scores">
+    <div class="score"><b>90%</b><span>crash-free driving on a track it never saw</span></div>
+    <div class="score"><b>100%</b><span>Pong balls returned (blind control: 9%)</span></div>
+    <div class="score"><b>81%</b><span>of platform tilt cancelled by its nerve cord</span></div>
+    <div class="score"><b>100%</b><span>of flies chose petrol after training</span></div>
+  </div>
+</header>
+
+<section class="exp">
+  <div class="exp-head"><div class="eyebrow">Experiment 1 · vision → steering</div><h2>The fly drives a car</h2></div>
+  <div class="media">
+    <figure><video src="videos/car_unseen_track.mp4" poster="images/car_unseen_track.jpg" controls muted playsinline preload="metadata"></video><figcaption>Trained fly on the bean-shaped track it never trained on.</figcaption></figure>
+    <figure><video src="videos/car_native_untrained.mp4" poster="images/car_native_untrained.jpg" controls muted playsinline preload="metadata"></video><figcaption>Same brain using only its own steering neurons (DNa02), no training.</figcaption></figure>
+  </div>
+  <div class="split">
+    <div class="how">
+      <p>The car carries the fly's two compound eyes, 2 cm above a track lined with poles. Every 10 ms the scene is ray-traced into the 1,466 facet columns of the real retina map and fed to the full brain. A linear readout listens to 11,080 visual-projection and descending neurons and turns their activity into a steering angle.</p>
+      <p class="learn">Learned: that one readout, by imitation (DAgger) on three training tracks in a featureless room. The first version memorised the room's striped walls instead of the road and crashed 10 times a minute on new tracks; plain walls fixed it.</p>
+    </div>
+    <div class="tablebox"><table class="ledger">
+      <tr><th>Unseen bean track, 2 × 20 s</th><th style="text-align:right">crash-free</th></tr>
+      <tr class="main"><td>Trained fly</td><td class="v">90%</td></tr>
+      <tr><td>Fly's own steering neurons</td><td class="v low">5%</td></tr>
+      <tr><td>Trained readout, eyes covered</td><td class="v low">10%</td></tr>
+      <tr><td>Training oval, trained fly</td><td class="v">100%</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<section class="exp">
+  <div class="exp-head"><div class="eyebrow">Experiment 2 · tracking a moving object</div><h2>The fly plays Pong, then plays itself</h2></div>
+  <div class="media">
+    <figure><video src="videos/pong_fly.mp4" poster="images/pong_fly.jpg" controls muted playsinline preload="metadata"></video><figcaption>The fly rides the paddle and watches the ball through its own eyes.</figcaption></figure>
+    <figure><video src="videos/pong_duel.mp4" poster="images/pong_duel.jpg" controls muted playsinline preload="metadata"></video><figcaption>Two independent copies of the brain, one per paddle. Longest rally: 30.</figcaption></figure>
+  </div>
+  <div class="split">
+    <div class="how">
+      <p>A fly's eye is about 1,500 pixels, so a small ball half a court away is a single blurry facet. At fly scale the ball spans about 17°. The paddle's motion is decoded from visual neurons plus retinotopic optic-lobe columns (Tm, TmY, Mi, T2/T3 cells), which keep track of where the ball sits in the visual field.</p>
+      <p class="learn">Learned: a linear readout of the ball's bearing, by imitation with a wandering paddle so the fly sees the ball everywhere. The brain is unchanged.</p>
+    </div>
+    <div class="tablebox"><table class="ledger">
+      <tr><th>2 games × 40 s</th><th style="text-align:right">returned</th></tr>
+      <tr class="main"><td>Trained fly</td><td class="v">100% (40/40)</td></tr>
+      <tr><td>Same readout, eyes covered</td><td class="v low">9% (6/68)</td></tr>
+      <tr><td>Paddle frozen in the middle</td><td class="v low">49% (24/49)</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<section class="exp">
+  <div class="exp-head"><div class="eyebrow">Experiments 3–4 · a physical body</div><h2>The nerve cord balances a rocking fly, in 100 different bodies</h2></div>
+  <div class="media one" id="balance-media">
+    <figure><video src="videos/balance.mp4" poster="images/balance.jpg" controls muted playsinline preload="metadata"></video><figcaption>Left: legs locked. Middle: real nerve cord. Right: evolved body with the same brain. The floor rocks ±25°.</figcaption></figure>
+  </div>
+  <div class="split">
+    <div class="how">
+      <p>The body is flybody, the anatomically detailed MuJoCo fly (67 parts, adhesive claws). The brain is the real ventral nerve cord plus the antennal gravity pathway: 26,925 neurons. Leg load, joint angles, haltere rotation and antennal deflection drive the matching sensory neurons. Body tilt is read from 18,256 interneurons and motor neurons, never from the sensors, and drives a leveling reflex across 42 leg joints.</p>
+      <p>The nerve cord also produced a classic insect reflex with no tuning: bending a leg excites that leg's tibia-extensor motor neurons.</p>
+      <p class="learn">Learned: a 42-number leveling pattern (physics optimisation) and the tilt readout. One brain was then dropped into 100 random bodies (leg lengths, abdomen mass, stance), and a genetic algorithm evolved the body with the brain held fixed.</p>
+    </div>
+    <div class="tablebox"><table class="ledger">
+      <tr><th>Floor rocking ±25°, 2 × 6 s</th><th style="text-align:right">tilt removed</th></tr>
+      <tr class="main"><td>Real nerve cord + antennae</td><td class="v">81% (3.1°)</td></tr>
+      <tr><td>Legs locked</td><td class="v low">0% (16.5°)</td></tr>
+      <tr><td>Brain with its senses cut</td><td class="v low">worse than locked</td></tr>
+      <tr><td>Teacher that knows the true tilt</td><td class="v">90%</td></tr>
+      <tr><th style="padding-top:14px">100 random bodies, same brain</th><th></th></tr>
+      <tr><td>Best bodies</td><td class="v">~82%</td></tr>
+      <tr><td>Worst bodies</td><td class="v low">~35%</td></tr>
+      <tr><td>Long front legs</td><td class="v low">hurt (r = +0.52)</td></tr>
+      <tr class="main"><td>Evolved body: mid legs 0.7×, hind legs 1.6×</td><td class="v" id="evo-cell">87% (2.2°)</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<section class="exp">
+  <div class="exp-head"><div class="eyebrow">Experiment 5 · memory in the mushroom body</div><h2>Teaching a fly brain to love petrol, and to remember people by smell</h2></div>
+  <div class="media">
+    <figure><video src="videos/petrol_memory.mp4" poster="images/petrol_memory.jpg" controls muted playsinline preload="metadata"></video><figcaption>Petrol paired with the fly's reward dopamine neurons, then a T-maze test.</figcaption></figure>
+    <figure><video src="videos/people_memory.mp4" poster="images/people_memory.jpg" controls muted playsinline preload="metadata"></video><figcaption>Sam's scent paired with reward, Alex's with punishment.</figcaption></figure>
+  </div>
+  <div class="split">
+    <div class="how">
+      <p>Each smell activates a sparse code in about 900 of 4,064 Kenyon cells. During training, the fly's own dopamine neurons fire alongside the smell: PAM (316 cells, the sugar-reward neurons) or PPL1 (16 cells, the punishment neurons). Exactly as in real flies, the only synapses allowed to change are the 61,210 Kenyon cell → output-neuron synapses. They weaken when a Kenyon cell fires while its compartment's dopamine neurons fire. Compartments are read from the connectome itself.</p>
+      <p class="learn">Faces were tried first and dropped: in this model the Kenyon cells stay silent to visual input, so a face memory would have been faked. Petrol and body odours are stand-in glomerulus blends, not measured receptor data.</p>
+    </div>
+    <div class="tablebox"><table class="ledger">
+      <tr><th>16 flies per T-maze test</th><th style="text-align:right">before → after</th></tr>
+      <tr class="main"><td>Petrol vs banana</td><td class="v">62% → 100%</td></tr>
+      <tr class="main"><td>Petrol vs Sam's scent</td><td class="v">62% → 88%</td></tr>
+      <tr class="main"><td>Petrol vs Alex's scent</td><td class="v">56% → 94%</td></tr>
+      <tr><td>Sham (no dopamine), petrol vs banana</td><td class="v low">62% → 75%</td></tr>
+      <tr class="main"><td>Sam vs Alex</td><td class="v">19% → 100%</td></tr>
+      <tr><td>Sham, Sam vs Alex</td><td class="v low">19% → 62%</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<section class="exp honest">
+  <div class="exp-head"><div class="eyebrow">Read before sharing</div><h2>What is real and what is not</h2></div>
+  <ul>
+    <li><b>Real:</b> the wiring (MaleCNS v1.0), the retina geometry, the neuron model (leaky integrate-and-fire after Shiu et al. 2024, via the open-source flybrain simulator), the flybody physics model, and the dopamine-gated learning rule.</li>
+    <li><b>Hand-built:</b> the driving instructor and Pong coach used for imitation, sensor encodings, the muscle-to-joint table, the leveling reflex rule, MBON valence signs (opponent compartments) and the T-maze choice rule. Each is labelled in the code.</li>
+    <li><b>Learned:</b> linear readouts and small interfaces only. Except at the mushroom body's output synapses, no synapse in the brain is ever changed.</li>
+    <li><b>Not attempted:</b> 1,000 interacting flies. At about 70 hours per simulated minute on this laptop, that needs a GPU cluster.</li>
+    <li><b>Sham controls move a little:</b> the fly's dopamine neurons fire on their own, so some synapses change even without training.</li>
+  </ul>
+</section>
+
+<section class="exp">
+  <div class="exp-head"><div class="eyebrow">Draft</div><h2>LinkedIn post</h2></div>
+  <div class="post">
+<pre id="post-text">I put a real fruit-fly brain in a car.
+
+In September, Janelia and Google Research released the complete wiring diagram of a male fruit fly: 167,106 neurons and 25.6 million connections. I wanted to see what that wiring can do when you give it a body. Everything ran on my M2 laptop.
+
+What I did, with the wiring never edited:
+
+🚗 Gave it a car. The fly's real compound eyes (1,466 facets) feed the full brain, and a linear readout of 11,080 neurons steers. On a track it had never seen: 90% crash-free. Its own steering neurons alone: 5%.
+
+🏓 Taught it Pong. 100% of balls returned; with its eyes covered, 9%. Then I gave two copies of the brain a paddle each. Longest rally: 30.
+
+🦵 Put its nerve cord in a physics body (flybody, MuJoCo) on a rocking floor. It cancels 81% of the tilt using leg sensors, haltere "gyroscopes" and antennal gravity sensing. Then I tried the same brain in 100 random bodies and let evolution design the body: it shortened the middle legs, lengthened the hind legs and took the brain from 80% to 87%.
+
+⛽ Taught it to love the smell of petrol. Only the mushroom body's output synapses could change, gated by the fly's own dopamine neurons, the same mechanism real flies use. Before training, 62% of flies picked petrol over banana in a T-maze. After: 100%. Without dopamine: 75%.
+
+What didn't work: memorising faces. In this model the memory centre ignores vision, so I switched to smell rather than fake it.
+
+What I learned: the connectome is not a pretrained model you download. It's a wiring diagram, and the interesting work is the interface between it and the world.
+
+#neuroscience #connectomics #AI #simulation</pre>
+    <button type="button" id="copy-post">Copy post</button>
+  </div>
+</section>
+
+<footer>Built with the MaleCNS v1.0 connectome (Janelia FlyEM + Google Research, CC BY 4.0), flybrain (MIT), flybody (Apache-2.0) and MuJoCo. Code and raw results: see the repository README.</footer>
+</div>
+
+<script>
+document.getElementById("copy-post").addEventListener("click", async (e) => {
+  const text = document.getElementById("post-text").innerText;
+  try { await navigator.clipboard.writeText(text); e.target.textContent = "Copied"; }
+  catch { const r = document.createRange(); r.selectNodeContents(document.getElementById("post-text"));
+          const s = getSelection(); s.removeAllRanges(); s.addRange(r); e.target.textContent = "Selected: press Copy"; }
+});
+</script>
+</body>
+</html>

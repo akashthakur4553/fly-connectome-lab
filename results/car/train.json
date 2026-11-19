@@ -1,0 +1,38 @@
+[
+ {
+  "round": 0,
+  "beta": 1.0,
+  "frames": 6000,
+  "cv_r2": 0.8785398526153658,
+  "crashes_during": 0,
+  "fly_seconds": 60.0,
+  "wall_s": 207.65156197547913
+ },
+ {
+  "round": 1,
+  "beta": 0.5,
+  "frames": 12000,
+  "cv_r2": 0.9005758905427662,
+  "crashes_during": 0,
+  "fly_seconds": 60.0,
+  "wall_s": 445.0134370326996
+ },
+ {
+  "round": 2,
+  "beta": 0.25,
+  "frames": 18000,
+  "cv_r2": 0.8663020404622417,
+  "crashes_during": 0,
+  "fly_seconds": 60.0,
+  "wall_s": 736.3411350250244
+ },
+ {
+  "round": 3,
+  "beta": 0.0,
+  "frames": 24000,
+  "cv_r2": 0.7947508011093377,
+  "crashes_during": 2,
+  "fly_seconds": 60.0,
+  "wall_s": 1025.8413741588593
+ }
+]
