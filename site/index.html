@@ -196,53 +196,7 @@ footer { font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--ru
   </div>
 </section>
 
-<section class="exp honest">
-  <div class="exp-head"><div class="eyebrow">Read before sharing</div><h2>What is real and what is not</h2></div>
-  <ul>
-    <li><b>Real:</b> the wiring (MaleCNS v1.0), the retina geometry, the neuron model (leaky integrate-and-fire after Shiu et al. 2024, via the open-source flybrain simulator), the flybody physics model, and the dopamine-gated learning rule.</li>
-    <li><b>Hand-built:</b> the driving instructor and Pong coach used for imitation, sensor encodings, the muscle-to-joint table, the leveling reflex rule, MBON valence signs (opponent compartments) and the T-maze choice rule. Each is labelled in the code.</li>
-    <li><b>Learned:</b> linear readouts and small interfaces only. Except at the mushroom body's output synapses, no synapse in the brain is ever changed.</li>
-    <li><b>Not attempted:</b> 1,000 interacting flies. At about 70 hours per simulated minute on this laptop, that needs a GPU cluster.</li>
-    <li><b>Sham controls move a little:</b> the fly's dopamine neurons fire on their own, so some synapses change even without training.</li>
-  </ul>
-</section>
-
-<section class="exp">
-  <div class="exp-head"><div class="eyebrow">Draft</div><h2>LinkedIn post</h2></div>
-  <div class="post">
-<pre id="post-text">I put a real fruit-fly brain in a car.
-
-In September, Janelia and Google Research released the complete wiring diagram of a male fruit fly: 167,106 neurons and 25.6 million connections. I wanted to see what that wiring can do when you give it a body. Everything ran on my M2 laptop.
-
-What I did, with the wiring never edited:
-
-🚗 Gave it a car. The fly's real compound eyes (1,466 facets) feed the full brain, and a linear readout of 11,080 neurons steers. On a track it had never seen: 90% crash-free. Its own steering neurons alone: 5%.
-
-🏓 Taught it Pong. 100% of balls returned; with its eyes covered, 9%. Then I gave two copies of the brain a paddle each. Longest rally: 30.
-
-🦵 Put its nerve cord in a physics body (flybody, MuJoCo) on a rocking floor. It cancels 81% of the tilt using leg sensors, haltere "gyroscopes" and antennal gravity sensing. Then I tried the same brain in 100 random bodies and let evolution design the body: it shortened the middle legs, lengthened the hind legs and took the brain from 80% to 87%.
-
-⛽ Taught it to love the smell of petrol. Only the mushroom body's output synapses could change, gated by the fly's own dopamine neurons, the same mechanism real flies use. Before training, 62% of flies picked petrol over banana in a T-maze. After: 100%. Without dopamine: 75%.
-
-What didn't work: memorising faces. In this model the memory centre ignores vision, so I switched to smell rather than fake it.
-
-What I learned: the connectome is not a pretrained model you download. It's a wiring diagram, and the interesting work is the interface between it and the world.
-
-#neuroscience #connectomics #AI #simulation</pre>
-    <button type="button" id="copy-post">Copy post</button>
-  </div>
-</section>
-
 <footer>Built with the MaleCNS v1.0 connectome (Janelia FlyEM + Google Research, CC BY 4.0), flybrain (MIT), flybody (Apache-2.0) and MuJoCo. Code and raw results: see the repository README.</footer>
 </div>
-
-<script>
-document.getElementById("copy-post").addEventListener("click", async (e) => {
-  const text = document.getElementById("post-text").innerText;
-  try { await navigator.clipboard.writeText(text); e.target.textContent = "Copied"; }
-  catch { const r = document.createRange(); r.selectNodeContents(document.getElementById("post-text"));
-          const s = getSelection(); s.removeAllRanges(); s.addRange(r); e.target.textContent = "Selected: press Copy"; }
-});
-</script>
 </body>
 </html>
